@@ -1,0 +1,8 @@
+{
+  "monad-testnet": {
+    "NadsCityNFT": {
+      "address": "0x0260871fd951C6cc8B09A8Bf3BD9fee2F51d9458",
+      "startBlock": 0
+    }
+  }
+}
