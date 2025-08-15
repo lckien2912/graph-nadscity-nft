@@ -1,96 +1,88 @@
-type Approval @entity(immutable: true) {
-  id: Bytes!
-  owner: Bytes! # address
-  approved: Bytes! # address
-  tokenId: BigInt! # uint256
+type Contract @entity(immutable: true) {
+  id: ID!
+  name: String
+  symbol: String
+  totalSupply: BigInt!
+  mintedTokens: [Token!]! @derivedFrom(field: "contract")
+  createdAtTimestamp: BigInt!
+  createdAtBlockNumber: BigInt!
+}
+
+type Token @entity(immutable: true) {
+  id: ID!
+  contract: Contract!
+  tokenID: BigInt!
+  owner: User!
+  approved: User
+  tokenURI: String
+  metadata: TokenMetadata
+  transfers: [Transfer!]! @derivedFrom(field: "token")
+  createdAtTimestamp: BigInt!
+  createdAtBlockNumber: BigInt!
+  updatedAtTimestamp: BigInt!
+  updatedAtBlockNumber: BigInt!
+}
+
+type TokenMetadata @entity(immutable: true) {
+  id: ID!
+  name: String
+  description: String
+  image: String
+  externalURL: String
+  attributes: [TokenAttribute!]! @derivedFrom(field: "metadata")
+}
+
+type TokenAttribute @entity(immutable: true) {
+  id: ID!
+  metadata: TokenMetadata!
+  traitType: String!
+  value: String!
+  displayType: String
+}
+
+type User @entity(immutable: true) {
+  id: ID!
+  address: Bytes!
+  ownedTokens: [Token!]! @derivedFrom(field: "owner")
+  approvedTokens: [Token!]! @derivedFrom(field: "approved")
+  transfersFrom: [Transfer!]! @derivedFrom(field: "from")
+  transfersTo: [Transfer!]! @derivedFrom(field: "to")
+  totalTokensOwned: BigInt!
+  totalTokensSent: BigInt!
+  totalTokensReceived: BigInt!
+  firstTransactionTimestamp: BigInt!
+  firstTransactionBlockNumber: BigInt!
+}
+
+type Transfer @entity(immutable: true) {
+  id: ID!
+  token: Token!
+  from: User!
+  to: User!
+  timestamp: BigInt!
   blockNumber: BigInt!
-  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+  gasPrice: BigInt!
+  gasUsed: BigInt!
+}
+
+type Approval @entity(immutable: true) {
+  id: ID!
+  token: Token!
+  owner: User!
+  approved: User!
+  timestamp: BigInt!
+  blockNumber: BigInt!
   transactionHash: Bytes!
 }
 
 type ApprovalForAll @entity(immutable: true) {
-  id: Bytes!
-  owner: Bytes! # address
-  operator: Bytes! # address
-  approved: Boolean! # bool
+  id: ID!
+  contract: Contract!
+  owner: User!
+  operator: User!
+  approved: Boolean!
+  timestamp: BigInt!
   blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type AttributesUpdated @entity(immutable: true) {
-  id: Bytes!
-  tokenId: BigInt! # uint256
-  name: String! # string
-  rarity: Int! # uint8
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Minted @entity(immutable: true) {
-  id: Bytes!
-  to: Bytes! # address
-  tokenId: BigInt! # uint256
-  name: String! # string
-  rarity: Int! # uint8
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Paused @entity(immutable: true) {
-  id: Bytes!
-  account: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RoleAdminChanged @entity(immutable: true) {
-  id: Bytes!
-  role: Bytes! # bytes32
-  previousAdminRole: Bytes! # bytes32
-  newAdminRole: Bytes! # bytes32
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RoleGranted @entity(immutable: true) {
-  id: Bytes!
-  role: Bytes! # bytes32
-  account: Bytes! # address
-  sender: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RoleRevoked @entity(immutable: true) {
-  id: Bytes!
-  role: Bytes! # bytes32
-  account: Bytes! # address
-  sender: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Transfer @entity(immutable: true) {
-  id: Bytes!
-  from: Bytes! # address
-  to: Bytes! # address
-  tokenId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Unpaused @entity(immutable: true) {
-  id: Bytes!
-  account: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
   transactionHash: Bytes!
 }

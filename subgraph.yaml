@@ -1,53 +1,33 @@
-specVersion: 1.3.0
-indexerHints:
-  prune: auto
+specVersion: 0.0.5
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: NadsCityNFT
+    name: ERC721Contract
     network: monad-testnet
     source:
-      address: "0x0260871fd951C6cc8B09A8Bf3BD9fee2F51d9458"
-      abi: NadsCityNFT
-      startBlock: 0
+      address: "0x3a9454c1b4c84d1861bb1209a647c834d137b442" # Replace with actual contract address
+      abi: ERC721
+      startBlock: 0 # Replace with contract deployment block
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.9
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Approval
-        - ApprovalForAll
-        - AttributesUpdated
-        - Minted
-        - Paused
-        - RoleAdminChanged
-        - RoleGranted
-        - RoleRevoked
+        - Token
+        - User
         - Transfer
-        - Unpaused
+        - Contract
       abis:
-        - name: NadsCityNFT
-          file: ./abis/NadsCityNFT.json
+        - name: ERC721
+          file: ./abis/ERC721.json
+        - name: ERC721Metadata
+          file: ./abis/ERC721Metadata.json
       eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
         - event: Approval(indexed address,indexed address,indexed uint256)
           handler: handleApproval
         - event: ApprovalForAll(indexed address,indexed address,bool)
           handler: handleApprovalForAll
-        - event: AttributesUpdated(indexed uint256,string,uint8)
-          handler: handleAttributesUpdated
-        - event: Minted(indexed address,indexed uint256,string,uint8)
-          handler: handleMinted
-        - event: Paused(address)
-          handler: handlePaused
-        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
-          handler: handleRoleAdminChanged
-        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
-          handler: handleRoleGranted
-        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
-          handler: handleRoleRevoked
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
-        - event: Unpaused(address)
-          handler: handleUnpaused
-      file: ./src/nads-city-nft.ts
+      file: ./src/mapping.ts
