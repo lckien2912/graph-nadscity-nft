@@ -6,9 +6,9 @@ dataSources:
     name: ERC721Contract
     network: monad-testnet
     source:
-      address: "0x3a9454c1b4c84d1861bb1209a647c834d137b442" # Replace with actual contract address
+      address: "0x0260871fd951C6cc8B09A8Bf3BD9fee2F51d9458" # Replace with actual contract address
       abi: ERC721
-      startBlock: 0 # Replace with contract deployment block
+      startBlock: 30662683 # Replace with contract deployment block
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
